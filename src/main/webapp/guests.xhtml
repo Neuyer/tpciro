@@ -1,0 +1,79 @@
+<f:view xmlns="http://www.w3c.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:ng="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:prime="http://primefaces.org/ui">
+	<h:head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>#{guestController.title}</title>
+		<style>
+		body {font-size:12px; }
+		</style>
+	</h:head>
+	<h:body>
+		<prime:panel>
+			<prime:button value="Hóspedes"  outcome="guests"/>
+			<prime:button value="Quartos"  outcome="rooms"/>
+			<prime:button value="Contas"  outcome="bill"/>
+			<prime:button value="Produtos"  outcome="products"/>
+		</prime:panel>
+		<h:form>
+			<prime:panel id="painel" header="Cadastro de hóspede" >				
+				<prime:outputLabel for="name" value="nome: " />
+                <prime:inputText id="name" value="#{guestController.guest.name}" />
+                <prime:outputLabel for="cpf" value="cpf " />
+                <prime:inputNumber id="cpf" value="#{guestController.guest.cpf}" />
+                <prime:commandButton  value="Registrar" action="#{guestController.save}"/>
+                <prime:commandButton value= "Limpar">
+                	<prime:ajax update="painel" resetValues="true"/>
+                </prime:commandButton>
+			</prime:panel>
+		</h:form>
+		<prime:panel header="Deletar Hóspede">
+			<h:form>
+				<prime:outputLabel for="delId" value="Id do Hóspede a ser deletado: " />
+                <prime:inputText id="delId" value="#{guestController.g}" />
+                <prime:commandButton value= "Deletar" action="#{guestController.delete(guestController.g)}" update="hpds"/>
+			</h:form>
+		</prime:panel>
+		<prime:panel>
+				<prime:dataTable id="hpds" var="g" value="#{guestController.guests}">
+				<prime:column headerText="ID">
+					<h:outputText value= "#{g.id}"/>
+				</prime:column>
+				<prime:column headerText="Nome">
+					<h:outputText value="#{g.name}"/>
+				</prime:column>
+				<prime:column headerText="CPF">
+					<h:outputText value="#{g.cpf}"/>
+				</prime:column>
+				</prime:dataTable>
+				<prime:commandButton value="Lista de todos os hóspedes" action="#{guestController.findAllGuests}" update="hpds"/>
+		</prime:panel>
+		<prime:panel>
+			<prime:dataTable id="rms" var="r" value="#{guestController.rooms}">
+				<prime:column headerText="Todos os Quartos ">
+					<h:outputText value="#{r.number}"/>
+				</prime:column>
+				<prime:column headerText="Valor da Diária">
+					<h:outputText value="R$ #{r.dailyprice}"/>
+				</prime:column>
+				<prime:column headerText="Vago">
+					<h:outputText value="#{r.occupied?'Ocupado':'Vago'}"/>
+				</prime:column>
+				</prime:dataTable>
+				<prime:commandButton value="Recarregar Lista" action="#{guestController.findAllRooms}" update="rms"/>
+		</prime:panel>
+		<prime:panel header="Hospedar">
+			<h:form>
+				<prime:outputLabel for="gId" value="Id de Hóspede: " />
+	            <prime:inputNumber id="gId" value="#{guestController.g}" />
+	            <prime:outputLabel for="number" value="Quarto: " />
+	            <prime:inputNumber id="number" value="#{guestController.r}" />
+	            <prime:commandButton value="Alocar Hospede" action="#{guestController.insertGuest(guestController.g,guestController.r)}" update="rms"/>
+			</h:form>
+		</prime:panel>
+	</h:body>
+</f:view>

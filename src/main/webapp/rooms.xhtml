@@ -1,0 +1,48 @@
+<f:view xmlns="http://www.w3c.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:ng="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:prime="http://primefaces.org/ui">
+	<h:head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>#{roomController.title}</title>
+		<style>
+		body {font-size:12px; }
+		</style>
+	</h:head>
+	<h:body>
+	<prime:panel>
+			<prime:button value="Hóspedes"  outcome="guests"/>
+			<prime:button value="Quartos"  outcome="rooms"/>
+			<prime:button value="Contas"  outcome="bill"/>
+			<prime:button value="Produtos"  outcome="products"/>
+		</prime:panel>
+		<h:form>
+			<prime:panel header="Cadastro de quartos" >				
+                <prime:outputLabel for="dailyprice" value="Valor da diária" />
+                <prime:inputNumber id="dailyprice" value="#{roomController.room.dailyprice}" />
+                <prime:outputLabel for="vacancy" value="Número de vagas" />
+                <prime:inputNumber id="vacancy" value="#{roomController.room.vacancy}" />
+                <prime:commandButton  value="Registrar" action="#{roomController.save}"/>
+			</prime:panel>
+		</h:form>
+			<prime:panel header="Deletar Quarto">
+			<h:form>
+				<prime:outputLabel for="delId" value="Número do quarto a ser deletado: " />
+                <prime:inputText id="delId" value="#{roomController.room.number}" />
+                <prime:commandButton value= "Deletar" action="#{roomController.delete(roomController.room.number)}" />
+			</h:form>
+			</prime:panel>
+			<prime:dataTable id="rms" var="r" value="#{roomController.rooms}">
+				<prime:column headerText="Todos os Quartos ">
+					<h:outputText value="#{r.number}"/>
+				</prime:column>
+				<prime:column>
+					<h:outputText value="R$ #{r.dailyprice}"/>
+				</prime:column>
+			</prime:dataTable>
+			<prime:commandButton value="Lista de todos os Produtos" action="#{roomController.findAllRooms}" update="rms"/>
+	</h:body>
+</f:view>

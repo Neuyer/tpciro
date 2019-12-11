@@ -1,0 +1,56 @@
+<f:view xmlns="http://www.w3c.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:ng="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:prime="http://primefaces.org/ui">
+	<h:head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>#{productController.title}</title>
+		<style>
+		body {font-size:12px; }
+		</style>
+	</h:head>
+	<h:body>
+		<prime:panel>
+			<prime:button value="Hóspedes"  outcome="guests"/>
+			<prime:button value="Quartos"  outcome="rooms"/>
+			<prime:button value="Contas"  outcome="bill"/>
+			<prime:button value="Produtos"  outcome="products"/>
+		</prime:panel>	
+		<prime:panel header="Cadastrar um produto" id="productPanel" >				
+			<h:form>
+				<prime:outputLabel for="name" value="nome: " />
+                <prime:inputText id="name" value="#{productController.product.name}" />
+                <prime:outputLabel for="price" value="preço: " />
+                <prime:inputNumber id="price" value="#{productController.product.price}" />
+                <prime:commandButton  value="Registrar" action="#{productController.save}" />
+                 <prime:commandButton value= "Limpar">
+                	<prime:ajax update="productPanel" resetValues="true"/>
+                </prime:commandButton>
+			</h:form>
+		</prime:panel>
+		<prime:panel header="Deletar Produto">
+			<h:form>
+				<prime:outputLabel for="delId" value="Id do Produto a ser deletado: " />
+                <prime:inputText id="delId" value="#{productController.product.id}" />
+                <prime:commandButton value= "Deletar" action="#{productController.delete(productController.product.id)}" />
+			</h:form>
+		</prime:panel>
+		<prime:panel header="Todos os produtos">
+				<prime:dataTable id="prds" var="p" value="#{productController.products}">
+				<prime:column headerText="Id">
+					<h:outputText value="#{p.id}"/>
+				</prime:column>
+				<prime:column headerText="Nome">
+					<h:outputText value="#{p.name}"/>
+				</prime:column>
+				<prime:column>
+					<h:outputText value="R$ #{p.price}"/>
+				</prime:column>
+				</prime:dataTable>
+				<prime:commandButton value="Lista de todos os Produtos" action="#{productController.findAllProducts}" update="prds"/>
+		</prime:panel>
+	</h:body>
+</f:view>
